@@ -20,3 +20,9 @@ python_version = "3.7"
 
 [pipenv]
 allow_prereleases = true
+
+[scripts]
+format = "black fo test.py"
+lint = "flake8 fo test.py"
+test = "pytest test.py"
+typecheck = "mypy fo test.py"
