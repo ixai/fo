@@ -1,7 +1,12 @@
 import click
 
+from .math import Operation
+from .types import OperationParam
+
 
 @click.command()
-def fraction_operation(operation: Operation):
+@click.argument("operation", type=OperationParam())
+def fraction_operation(operation: Operation) -> None:
     """Perform fractions operations"""
-    pass
+    result = operation.operate()
+    click.echo(f"{result:.0f}")
