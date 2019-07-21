@@ -9,4 +9,4 @@ from .types import OperationParam
 def fraction_operation(operation: Operation) -> None:
     """Perform fractions operations"""
     result = operation.operate()
-    click.echo(f"{result:.0f}")
+    click.echo(f"{result}")
