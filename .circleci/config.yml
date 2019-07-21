@@ -106,6 +106,17 @@ jobs:
     - pipenv_run:
         script: test
 
+  "publish":
+    executor:
+      name: python
+    steps:
+    - git_checkout_from_cache
+    - pipenv_cache_restore
+    - pipenv_run:
+        script: build
+    - pipenv_run:
+        script: publish
+
 workflows:
   version: 2.1
 
@@ -124,3 +135,16 @@ workflows:
     - "test":
         requires:
         - "init repository"
+    - "publish approval":
+        type: approval
+        requires:
+          - "format"
+          - "lint"
+          - "typecheck"
+          - "test"
+        filters:
+          branches:
+            only: master
+    - "publish":
+        requires:
+          - "publish approval"

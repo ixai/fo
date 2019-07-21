@@ -1,5 +1,8 @@
+dist/
+build/
 *.egg-info
 .vscode/
 .venv/
 .pytest_cache/
 .mypy_cache/
+.DS_Store

@@ -11,6 +11,7 @@ flake8 = "*"
 pytest = "*"
 fo = {editable = true,path = "."}
 rope = "*"
+twine = "*"
 
 [packages]
 click = "*"
@@ -26,3 +27,5 @@ format = "black fo test.py"
 lint = "flake8 fo test.py"
 test = "pytest test.py"
 typecheck = "mypy fo test.py"
+build = "python setup.py sdist bdist_wheel"
+publish = "twine upload --disable-progress-bar --repository-url https://test.pypi.org/legacy/ dist/*"
