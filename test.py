@@ -22,7 +22,7 @@ def assert_all_operators(runner: CliRunner) -> Callable[..., None]:
                 fraction_operation, [f"? {left_operand} {operator} {right_operand}"]
             )
             assert _result.exit_code == 0
-            assert _result.output == f"{result}\n"
+            assert _result.output == f"= {result}\n"
 
     return _assert_all_operators
 
@@ -89,4 +89,4 @@ def test_negative_results(runner: CliRunner) -> None:
     for operand, result in operation_map.items():
         _result = runner.invoke(fraction_operation, [f"? 0 - {operand}"])
         assert _result.exit_code == 0
-        assert _result.output == f"{result}\n"
+        assert _result.output == f"= {result}\n"
