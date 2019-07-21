@@ -1,0 +1,126 @@
+version: 2.1
+
+executors:
+
+  python:
+    docker:
+    - image: circleci/python:3.7.4
+    environment:
+      PIPENV_VENV_IN_PROJECT: 1
+
+commands:
+
+  # Git commands
+  git_checkout_from_cache:
+    steps:
+    - restore_cache:
+        keys:
+        - v0-source-{{ .Branch }}-{{ .Revision }}
+        - v0-source-{{ .Branch }}
+        - v0-source-master
+        - v0-source
+    - checkout
+
+  git_cache_save:
+    steps:
+    - save_cache:
+        key: v0-source-{{ .Branch }}-{{ .Revision }}
+        paths:
+        - ".git"
+
+  # Pipenv commands
+
+  pipenv_cache_restore:
+    steps:
+    - run:
+        command: pip install -q pipenv
+    - restore_cache:
+        keys:
+        - v0-pipenv-{{ .Branch }}-{{ checksum "Pipfile.lock" }}
+        - v0-pipenv-{{ .Branch }}
+        - v0-pipenv-master
+        - v0-pipenv
+
+  pipenv_cache_save:
+    steps:
+    - save_cache:
+        key: v0-pipenv-{{ .Branch }}-{{ checksum "Pipfile.lock" }}
+        paths:
+        - .venv
+
+  pipenv_run:
+    parameters:
+      script:
+        type: string
+    steps:
+    - run:
+        command: pipenv run << parameters.script >>
+
+
+jobs:
+
+  "init repository":
+    executor:
+      name: python
+    steps:
+    - git_checkout_from_cache
+    - pipenv_cache_restore
+    - run:
+        command: pipenv install --deploy --dev
+    - git_cache_save
+    - pipenv_cache_save
+
+  "format":
+    executor:
+      name: python
+    steps:
+    - git_checkout_from_cache
+    - pipenv_cache_restore
+    - pipenv_run:
+        script: format --check
+
+  "lint":
+    executor:
+      name: python
+    steps:
+    - git_checkout_from_cache
+    - pipenv_cache_restore
+    - pipenv_run:
+        script: lint
+
+  "typecheck":
+    executor:
+      name: python
+    steps:
+    - git_checkout_from_cache
+    - pipenv_cache_restore
+    - pipenv_run:
+        script: typecheck
+
+  "test":
+    executor:
+      name: python
+    steps:
+    - git_checkout_from_cache
+    - pipenv_cache_restore
+    - pipenv_run:
+        script: test
+
+workflows:
+  version: 2.1
+
+  ci:
+    jobs:
+    - "init repository"
+    - "format":
+        requires:
+        - "init repository"
+    - "lint":
+        requires:
+        - "init repository"
+    - "typecheck":
+        requires:
+        - "init repository"
+    - "test":
+        requires:
+        - "init repository"

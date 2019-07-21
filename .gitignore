@@ -1,4 +1,5 @@
 *.egg-info
 .vscode/
+.venv/
 .pytest_cache/
 .mypy_cache/
