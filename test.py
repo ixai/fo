@@ -90,3 +90,7 @@ def test_negative_results(runner: CliRunner) -> None:
         _result = runner.invoke(fraction_operation, [f"? 0 - {operand}"])
         assert _result.exit_code == 0
         assert _result.output == f"= {result}\n"
+
+def test_false():
+    assert False
+
