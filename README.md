@@ -2,7 +2,13 @@
 
 ## Installation
 
-Install `fo` using your prefered python package manager. Usually `pip install fo`.
+`fo` is published in [TestPyPI](https://test.pypi.org/project/fo/) while dependencies must be
+installed from the main PyPI repository. Because of this, two separate install commands must be issued.
+
+```sh
+pip install click
+pip install --index-url https://test.pypi.org/simple/ --no-deps fo
+```
 
 ## Usage
 
@@ -10,7 +16,8 @@ Install `fo` using your prefered python package manager. Usually `pip install fo
 $ fo "? 1_2/3 + 4_5/6"
 ```
 
-`fo` expects a single argument with the operation to perform. The operation format is `[?] LEFT_OPERAND OPERATOR RIGHT_OPERAND` where:
+`fo` expects a single argument with the operation to perform. The operation format is
+`[?] LEFT_OPERAND OPERATOR RIGHT_OPERAND` where:
 - `?` is an optional operation prefix
 - `OPERATOR` is one of `+`, `-`, `*`, `/`
 - `LEFT_OPERAND` and `RIGHT_OPERAND` are either:
@@ -34,6 +41,9 @@ Checkout the code and setup a clean environment using `pipenv`.
 ```sh
 pipenv install --dev
 ```
+
+`fo` is installed in the virtual environment as an editable dependency, so you can modify the code
+and run `fo` without the need to rebuild the package.
 
 The following scripts are available to verify your code.
 
