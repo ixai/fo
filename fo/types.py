@@ -3,7 +3,7 @@ from typing import Optional
 
 import click
 
-from .math import Operation
+from .math import Fraction, Operation
 
 INTEGER_RE = re.compile(r"^-?(?P<whole>\d+)$")
 FRACTION_RE = re.compile(r"^-?(?P<numerator>\d+)/(?P<denominator>\d+)$")
@@ -24,7 +24,7 @@ class InvalidOperatorError(Exception):
 
 
 class OperationParam(click.ParamType):
-    name = "operation_parameter"
+    name = "fraction_operation"
 
     def convert(
         self, value: str, param: Optional[click.Parameter], ctx: Optional[click.Context]
@@ -46,7 +46,7 @@ class OperationParam(click.ParamType):
 
         return Operation(left_operand, operator, right_operand)
 
-    def _parse_operand(self, operand: str) -> float:
+    def _parse_operand(self, operand: str) -> Fraction:
         for regex in (INTEGER_RE, FRACTION_RE, MIXED_FRACTION_RE):
             match = regex.match(operand)
             if match:
@@ -64,7 +64,7 @@ class OperationParam(click.ParamType):
         if operand.startswith("-"):
             numerator *= -1
 
-        return numerator // denominator
+        return Fraction(numerator=numerator, denominator=denominator)
 
     def _parse_operator(self, operator: str) -> str:
         if operator not in VALID_OPERATORS:

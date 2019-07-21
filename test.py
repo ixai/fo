@@ -53,3 +53,39 @@ def test_integer_operations(runner: CliRunner) -> None:
         _result = runner.invoke(fraction_operation, [f"? 3 {operator} 3"])
         assert _result.exit_code == 0
         assert _result.output == f"{result}\n"
+
+
+def test_fraction_operations(runner: CliRunner) -> None:
+    operation_map = {"+": "2/3", "-": "0", "*": "1/9", "/": "1"}
+
+    for operator, result in operation_map.items():
+        _result = runner.invoke(fraction_operation, [f"? 1/3 {operator} 1/3"])
+        assert _result.exit_code == 0
+        assert _result.output == f"{result}\n"
+
+
+def test_mixed_fraction_operations(runner: CliRunner) -> None:
+    operation_map = {"+": "6_2/3", "-": "0", "*": "11_1/9", "/": "1"}
+
+    for operator, result in operation_map.items():
+        _result = runner.invoke(fraction_operation, [f"? 3_1/3 {operator} 3_1/3"])
+        assert _result.exit_code == 0
+        assert _result.output == f"{result}\n"
+
+
+def test_negative_operands(runner: CliRunner) -> None:
+    operation_map = {"+": "0", "-": "-6_2/3", "*": "-11_1/9", "/": "-1"}
+
+    for operator, result in operation_map.items():
+        _result = runner.invoke(fraction_operation, [f"? -3_1/3 {operator} 3_1/3"])
+        assert _result.exit_code == 0
+        assert _result.output == f"{result}\n"
+
+
+def test_negative_results(runner: CliRunner) -> None:
+    operation_map = {"1": "-1", "1/3": "-1/3", "3_1/3": "-3_1/3"}
+
+    for operand, result in operation_map.items():
+        _result = runner.invoke(fraction_operation, [f"? 0 - {operand}"])
+        assert _result.exit_code == 0
+        assert _result.output == f"{result}\n"
