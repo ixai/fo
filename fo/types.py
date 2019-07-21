@@ -35,7 +35,7 @@ class OperationParam(click.ParamType):
             parts = parts[1:]
 
         if len(parts) != 3:
-            self.fail(f"{value} is not a valid operation", param, ctx)
+            self.fail(f"Invalid operation: {value}.", param, ctx)
 
         try:
             left_operand = self._parse_operand(parts[0])

@@ -49,18 +49,16 @@ def test_malformed_operation(runner: CliRunner) -> None:
         pass
 
     malformed_operations = (
-        "? 1 + ",
-        "? 1 + 1 + 3",
-        "? 1 + 1/",
-        "? 1 x 1",
-        "? 1_1 + 1",
-        "? 1",
-        "? + 1/3",
-        "? 1/0 + 1",
+        ("noop", "Invalid operation: noop."),
+        ("? left + 1", "Invalid operand: left."),
+        ("? 1 + right", "Invalid operand: right."),
+        ("? 1 operator 1", "Invalid operator: operator."),
+        ("? 1/0 + 1", "Invalid operand: 1/0."),
     )
     for operation, error_message in malformed_operations:
         result = runner.invoke(cli, [operation])
         assert result.exit_code == 2
+        assert error_message in result.output
 
 
 def test_integer_operations(assert_all_operators: Callable[..., None]) -> None:
