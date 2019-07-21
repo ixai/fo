@@ -12,6 +12,7 @@ pytest = "*"
 fo = {editable = true,path = "."}
 rope = "*"
 twine = "*"
+pytest-cov = "*"
 
 [packages]
 click = "*"
