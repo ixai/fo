@@ -12,8 +12,8 @@ pip install --index-url https://test.pypi.org/simple/ --no-deps fo
 
 ## Usage
 
-```
-$ fo "? 1_2/3 + 4_5/6"
+```sh
+fo "? 1_2/3 + 4_5/6"
 ```
 
 `fo` expects a single argument with the operation to perform. The operation format is
@@ -43,7 +43,19 @@ pipenv install --dev
 ```
 
 `fo` is installed in the virtual environment as an editable dependency, so you can modify the code
-and run `fo` without the need to rebuild the package.
+and run `fo` without the need to rebuild the package. To run `fo`, either run it as a `pipenv` script
+or activate the virtual environment shell first.
+
+```sh
+# Run fo as a pipenv script
+pipenv run fo --help
+```
+
+```sh
+# Activate the pipenv shell, then run fo as a shell script
+pipenv shell
+fo --help
+```
 
 The following scripts are available to verify your code.
 
